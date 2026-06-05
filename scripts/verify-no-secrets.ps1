@@ -23,7 +23,7 @@ foreach ($file in $files) {
   if ($rel.StartsWith($rootText, [System.StringComparison]::OrdinalIgnoreCase)) {
     $rel = $rel.Substring($rootText.Length)
   }
-  if ($file.Name -match '^\.env(\.|$)' -or $file.Name -eq 'auth.json') {
+  if ($file.Name -ne '.env.example' -and ($file.Name -match '^\.env(\.|$)' -or $file.Name -eq 'auth.json')) {
     $failures.Add("Forbidden file: $rel")
     continue
   }
@@ -38,10 +38,10 @@ foreach ($file in $files) {
   $ipPattern = '\b(?:\d{1,3}\.){3}\d{1,3}\b'
   $patterns = @(
     '-----BEGIN (RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----',
-    '(?m)^\s*TELEGRAM_BOT_TOKEN\s*=\s*(?!\*{3}masked\*{3}|"?\*{3}redacted\*{3})\S+',
+    '(?m)^\s*TELEGRAM_BOT_TOKEN\s*=\s*(?!\*{3}masked\*{3}|"?\*{3}redacted\*{3}|replace-with-|example|changeme)\S+',
     '\b\d{8,12}:[A-Za-z0-9_-]{30,}\b',
     $ipPattern,
-    '(?i)\b(openai|anthropic|github|todoist|notion|api)[_-]?(key|token)\s*[:=]\s*(?!["'']?\*{3})[A-Za-z0-9_\-\.]{16,}',
+    '(?i)\b(openai|anthropic|github|todoist|notion|api)[_-]?(key|token)\s*[:=]\s*(?!["'']?\*{3}|replace-with-|example|changeme)[A-Za-z0-9_\-\.]{16,}',
     '(?i)\b(password|passwd|pwd)\s*[:=]\s*(?!["'']?\*{3}|example|changeme|null|false)[^\s]{6,}'
   )
   foreach ($pattern in $patterns) {
@@ -56,7 +56,7 @@ foreach ($file in $files) {
       }
       continue
     }
-    if ($text -match $pattern) {
+    if ($text -cmatch $pattern) {
       $failures.Add("Potential secret in $rel matching $pattern")
       break
     }

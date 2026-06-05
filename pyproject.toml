@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-personal-agent"
+version = "0.1.0"
+description = "Public-safe Telegram AI agent template named Alice."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "python-telegram-bot>=21.0,<22.0",
+]
+
+[project.scripts]
+alice-telegram-agent = "hermes_agent.__main__:main"

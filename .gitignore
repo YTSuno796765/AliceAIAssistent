@@ -6,6 +6,8 @@
 .env.*
 !.env.example
 *.env
+.alice_memory.json
+runtime/
 sshgpt.env
 sshkey.env
 inf.env
@@ -40,6 +42,11 @@ snapshots/hermes/audio_cache/
 snapshots/hermes/image_cache/
 
 # Local/editor/build noise
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
 .DS_Store
 Thumbs.db
 .vscode/
